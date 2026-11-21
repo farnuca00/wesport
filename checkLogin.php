@@ -33,18 +33,14 @@ session_start();
             </div>
 
         <?php
-            $host = "localhost";
-            $user = "avid3868345";
-            $database = "my_avid3868345";
-            $dbconn = mysqli_connect($host, $user, "", $database) or die("Errore durante la connessione al database");
+            require 'db.php';
         
             if(!(isset($_POST['submit']))) {
                 header("Location: index.php");
             }
             else{
                 $email = $_POST['inputemail'];
-                $q1 = "select * from users where email = '$email'";
-                $result = mysqli_query($dbconn, $q1);
+                $result = q($dbconn, "select * from users where email = ?", [$email]);
                 if (!($line = mysqli_fetch_row($result))) {
                     echo '<div style="width:50%;" class="ctr-form">
                             <div class="row justify-content-md-center">
@@ -57,8 +53,7 @@ session_start();
                 }
                 else{
                     $password = $_POST['inputpassword'];
-                    $q2 = "select * from users where email = '$email' and password = md5('$password')";
-                    $result = mysqli_query($dbconn, $q2);
+                    $result = q($dbconn, "select * from users where email = ? and password = md5(?)", [$email, $password]);
                     if (!($line = mysqli_fetch_row($result))) {
                         $_SESSION['error'] = 1;
                         header('Location: login.php');

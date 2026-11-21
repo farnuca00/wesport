@@ -47,10 +47,7 @@
             </div>
 
         <?php
-            $host = "localhost";
-            $user = "avid3868345";
-            $database = "my_avid3868345";
-            $dbconn = mysqli_connect($host, $user, "", $database) or die("Errore durante la connessione al database");
+            require 'db.php';
 
             
             if(!(isset($_POST['submit']))) {
@@ -59,11 +56,9 @@
             else{
                 $email = $_POST['inputemail'];
                 $username = $_POST['inputusername'];
-                $q1 = "select * from users where email = '$email'";
-                $q2 = "select * from users where username = '$username'";
-                $result = mysqli_query($dbconn, $q1);
-                $result1 = mysqli_query($dbconn, $q2);
-                if($line = mysqli_fetch_row($result1) || $line = mysqli_fetch_row($result) ) {
+                $result = q($dbconn, "select * from users where email = ?", [$email]);
+                $result1 = q($dbconn, "select * from users where username = ?", [$username]);
+                if (mysqli_num_rows($result) > 0 || mysqli_num_rows($result1) > 0) {
                     echo '<div style="width:80%;" class="ctr-form justify-content-md-center">
                             <div class="row">
                                 <div class="col-md-12 mb-3">
@@ -74,11 +69,9 @@
                 }
                 else {
                     $nome = $_POST['inputname'];
-                    $username = $_POST['inputusername'];
                     $password = $_POST['inputpassword'];
                     $sex = $_POST['sex'];
-                    $q2 = "insert into users values ('$nome', '$email', '$username', md5('$password'), '$sex')";
-                    $data = mysqli_query($dbconn, $q2);
+                    $data = q($dbconn, "insert into users values (?, ?, ?, md5(?), ?)", [$nome, $email, $username, $password, $sex]);
                     if($data){
                         echo '<div class="ctr-form justify-content-md-center">
                                 <div class="row">
