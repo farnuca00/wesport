@@ -1,12 +1,11 @@
 <?php
-    $host = "localhost";
-    $user = "avid3868345";
-    $database = "my_avid3868345";
-    $tbl_name  = "user_online";
-    $dbconn = mysqli_connect($host, $user, "", $database) or die("Errore durante la connessione al database");
+    session_start();
+    require 'db.php';
 
+    if (!isset($_SESSION['inputemail'])) { exit; }
 
-    $user = $_POST['user'];
-    json_decode($user);
-    $sql1 = "UPDATE $tbl_name SET afk=1 WHERE username='$user'";
-    $result1 = mysqli_query($dbconn, $sql1);?>
+    q($dbconn,
+    "UPDATE user_online SET afk = 1
+    WHERE username = (SELECT username FROM users WHERE email = ?)",
+    [$_SESSION['inputemail']]);
+?>
