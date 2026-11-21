@@ -220,7 +220,7 @@ ini_set('display_errors', 0);
         $hour = $_POST['inputhour'];
         $organizzatore = $line[0];
         if(isset($_POST['inputdata']) && $_POST['inputdata'] >= $today){
-            $q2 = "insert into partita values ($val+1, 'Pallavolo', '$pitch', '$date', '$hour', '$organizzatore', 0)";
+            $q2 = "insert into partita values ($val+1, 'Pallavolo', '$pitch', '$date', '$hour', '$organizzatore')";
             $data = mysqli_query($dbconn, $q2);
             $show = 1;
             ?>
@@ -232,8 +232,10 @@ ini_set('display_errors', 0);
             <?php
         }
 
-        $rs1 = mysqli_query($dbconn, "SELECT * FROM partita where data = '$data1' and sport='Pallavolo'") or die("Cannot execute query: $query\n");
-        $rs2 = mysqli_query($dbconn, "SELECT * FROM partita where data = '$data1' and sport='Pallavolo'") or die("Cannot execute query: $query\n");
+        $rs1 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti
+                              FROM partita p WHERE p.data = '$data1' AND p.sport = 'Pallavolo'");
+        $rs2 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti
+                              FROM partita p WHERE p.data = '$data1' AND p.sport = 'Pallavolo'");
 
         $res = mysqli_query($dbconn, "SELECT count(ID) FROM partita where data = '$data1' and sport='Pallavolo'");
         $max = mysqli_result($res, 0);

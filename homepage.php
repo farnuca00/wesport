@@ -197,7 +197,7 @@ $time_check = $time-700;
        <br>
         <div id="elenco" class="row">                                                                                        
                 <?php
-                    $rs1 = mysqli_query($dbconn, "SELECT * FROM partita p join giocatori g on p.id=g.idpartita where data >= '$today' and g.username='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs1 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g2 WHERE g2.idpartita = p.id) AS iscritti FROM partita p JOIN giocatori g ON p.id = g.idpartita WHERE p.data >= '$today' AND g.username = '$line[0]'") or die("Cannot execute query: $query\n");
                     $rs0 = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p join giocatori g on p.id=g.idpartita where data >= '$today' and g.username='$line[0]'") or die("Cannot execute query: $query\n");
                 
                     echo '<div class="col-6">';
@@ -247,7 +247,7 @@ $time_check = $time-700;
                         }
                     echo '</div>';
         
-                    $rs2 = mysqli_query($dbconn, "SELECT * FROM partita p  where data >= '$today' and p.organizzatore='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs2 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti FROM partita p WHERE p.data >= '$today' AND p.organizzatore = '$line[0]'") or die("Cannot execute query: $query\n");
                     $rs = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p  where data >= '$today' and p.organizzatore='$line[0]'") or die("Cannot execute query: $query\n");
                     echo '<div class="col-6">';
                     echo '<div class="list-group-item flex-column align-items-start"><b>Partite organizzate</b></div>';
@@ -314,7 +314,7 @@ $time_check = $time-700;
        <br>
         <div id="elenco" class="row">                                                                                        
                 <?php
-                    $rs1 = mysqli_query($dbconn, "SELECT * FROM partita p join giocatori g on p.id=g.idpartita where data >= '$today' and g.username='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs1 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g2 WHERE g2.idpartita = p.id) AS iscritti FROM partita p JOIN giocatori g ON p.id = g.idpartita WHERE p.data >= '$today' AND g.username = '$line[0]'") or die("Cannot execute query: $query\n");
                     $rs0 = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p join giocatori g on p.id=g.idpartita where data >= '$today' and g.username='$line[0]'") or die("Cannot execute query: $query\n");
                 
                     echo '<div class="col-6">';
@@ -364,7 +364,7 @@ $time_check = $time-700;
                         }
                     echo '</div>';
         
-                    $rs2 = mysqli_query($dbconn, "SELECT * FROM partita p  where data >= '$today' and p.organizzatore='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs2 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti FROM partita p WHERE p.data >= '$today' AND p.organizzatore = '$line[0]'") or die("Cannot execute query: $query\n");
                     $rs = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p  where data >= '$today' and p.organizzatore='$line[0]'") or die("Cannot execute query: $query\n");
                     echo '<div class="col-6">';
                     echo '<div class="list-group-item flex-column align-items-start"><b>Partite organizzate</b></div>';
