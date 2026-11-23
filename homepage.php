@@ -1,9 +1,4 @@
 <?php 
-function mysqli_result($res, $row) { 
-    $res->data_seek($row); 
-    $datarow = $res->fetch_array(); 
-    return $datarow[0]; 
-} 
 session_start(); 
 
 error_reporting(0);
@@ -12,24 +7,18 @@ $today = date("Y-m-d");
 
 $session = null;
 
-$host = "localhost";
-$user = "avid3868345";
-$database = "my_avid3868345";
+require_once 'db.php';
 $tbl_name  = "user_online";
-$dbconn = mysqli_connect($host, $user, "", $database) or die("Errore durante la connessione al database");
 
 
 $email = $_SESSION["inputemail"];
-$q1 = "select username from users where email= '$email'";
-$result = mysqli_query($dbconn, $q1);
+$result = q($dbconn, "select username from users where email= ?", [$email]);
 $line = mysqli_fetch_row($result);
 
-$q1= "SELECT count(session) from $tbl_name where username='$line[0]'";
-$res = mysqli_query($dbconn, $q1);
+$res = q($dbconn, "SELECT count(session) from $tbl_name where username=?", [$line[0]]);
 $francy = mysqli_result($res, 0);
 if($francy == 1){
-    $q1= "SELECT session from $tbl_name where username='$line[0]'";
-    $res = mysqli_query($dbconn, $q1);
+    $res = q($dbconn, "SELECT session from $tbl_name where username=?", [$line[0]]);
     $session = mysqli_result($res, 0);
 }
 else{
@@ -77,16 +66,13 @@ $time_check = $time-700;
 
             echo '<a class="float-r" href="logout.php"><button type="button" class="btn btn-logout">Logout</button></a>'; 
 
-            $sql = "SELECT * FROM $tbl_name WHERE session='$session'";
-            $result = mysqli_query($dbconn, $sql);
+            $result = q($dbconn, "SELECT * FROM $tbl_name WHERE session=?", [$session]);
             $count = mysqli_num_rows($result);
 
             if ($count == "0") {
-                $sql1 = "INSERT INTO $tbl_name(session, time, username) VALUES('$session', '$time', '$line[0]')";
-                $result1 = mysqli_query($dbconn, $sql1);
+                $result1 = q($dbconn, "INSERT INTO $tbl_name(session, time, username) VALUES(?, ?, ?)", [$session, $time, $line[0]]);
             } else {
-                $sql2 = "UPDATE $tbl_name SET time='$time' WHERE session = '$session'";
-                $result2 = mysqli_query($dbconn, $sql2);
+                $result2 = q($dbconn, "UPDATE $tbl_name SET time=? WHERE session = ?", [$time, $session]);
             }
 
             $sql3 = "SELECT * FROM $tbl_name";
@@ -96,11 +82,9 @@ $time_check = $time-700;
             echo '<div class="float-r"><button type="button" class="btn btn-success"><b>Users online: ' . $count_user_online . '</b></button></div>';
 
             // if over 10 minute, delete session 
-            $sql4     = "DELETE FROM $tbl_name WHERE time<$time_check";
-            $result4  = mysqli_query($dbconn, $sql4);
+            $result4 = q($dbconn, "DELETE FROM $tbl_name WHERE time<?", [$time_check]);
 
-            $sql3 = "SELECT count(username) FROM $tbl_name where username = '$line[0]'";
-            $result3 = mysqli_query($dbconn, $sql3);
+            $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name where username = ?", [$line[0]]);
             $online = mysqli_result($result3, 0);
 
         ?>
@@ -114,7 +98,7 @@ $time_check = $time-700;
         if($online != 1){
             echo '<div class="btn-group">
             <button type="button" class="btn btn-login dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="offline.png" width=16> ' . $line[0] . '
+            <img src="offline.png" width=16> ' . e($line[0]) . '
             </button>
             <div class="dropdown-menu">
               <form action="profilo.php" method="post"><a class="dropdown-item"><button type="submit" style="background: none;
@@ -123,14 +107,14 @@ $time_check = $time-700;
               padding: 0;
               font: inherit;
               cursor: pointer;
-              outline: inherit;" id="profile1" name="profile" value= ' . $line[0] . '>Profilo</button></a></form>
+              outline: inherit;" id="profile1" name="profile" value="' . e($line[0]) . '">Profilo</button></a></form>
               <a class="dropdown-item" href="logout.php">Esci</a>
             </div>
           </div>';         }
         else{
             echo '<div class="btn-group">
             <button type="button" class="btn btn-login dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="online.png" width=16> ' . $line[0] . '
+            <img src="online.png" width=16> ' . e($line[0]) . '
             </button>
             <div class="dropdown-menu">
             <form action="profilo.php" method="post"><a class="dropdown-item"><button type="submit" style="background: none;
@@ -139,7 +123,7 @@ $time_check = $time-700;
             padding: 0;
             font: inherit;
             cursor: pointer;
-            outline: inherit;" id="profile1" name="profile" value= ' . $line[0] . '>Profilo</button></a></form>
+            outline: inherit;" id="profile1" name="profile" value="' . e($line[0]) . '">Profilo</button></a></form>
             <a class="dropdown-item" href="logout.php">Esci</a>
             </div>
           </div>';         }
@@ -159,10 +143,10 @@ $time_check = $time-700;
             <a href="profilo.php" id="profile" class="">
             <?php if(isset($_SESSION['inputemail']))
                 if($online != 1){
-                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value= ' . $line[0] . '><img src="offline.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . $line[0] . '</p></button></form>';
+                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value="' . e($line[0]) . '"><img src="offline.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . e($line[0]) . '</p></button></form>';
                 }
                 else{
-                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value= ' . $line[0] . '><img id="dot" src="online.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . $line[0] . '</p></button></form>';
+                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value="' . e($line[0]) . '"><img id="dot" src="online.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . e($line[0]) . '</p></button></form>';
                 }
             ?>
             </a>
@@ -189,7 +173,7 @@ $time_check = $time-700;
       <div id="sfondo" style="margin-left: 20%; margin-top: 2%; margin-right:5%">
       <?php
        echo '<h1><b>Benvenuto, ';
-       echo $line[0];
+       echo e($line[0]);
        echo '!<br>';
        echo 'Scegli il tuo sport preferito, iscriviti e gioca!';
        echo '</b></h1>';
@@ -197,8 +181,8 @@ $time_check = $time-700;
        <br>
         <div id="elenco" class="row">                                                                                        
                 <?php
-                    $rs1 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g2 WHERE g2.idpartita = p.id) AS iscritti FROM partita p JOIN giocatori g ON p.id = g.idpartita WHERE p.data >= '$today' AND g.username = '$line[0]'") or die("Cannot execute query: $query\n");
-                    $rs0 = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p join giocatori g on p.id=g.idpartita where data >= '$today' and g.username='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs1 = q($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g2 WHERE g2.idpartita = p.id) AS iscritti FROM partita p JOIN giocatori g ON p.id = g.idpartita WHERE p.data >= ? AND g.username = ?", [$today, $line[0]]);
+                    $rs0 = q($dbconn, "SELECT count(p.id) FROM partita p join giocatori g on p.id=g.idpartita where data >= ? and g.username=?", [$today, $line[0]]);
                 
                     echo '<div class="col-6">';
                     echo '<div class="list-group-item flex-column align-items-start"><b>Partite da giocare</b></div>';
@@ -239,16 +223,16 @@ $time_check = $time-700;
                                         echo '<span class="badge badge-red badge-pill disponibili">Posti terminati</span>';
                                     }
                             echo  '</div>
-                                  <h5 class="mb-1">' . $data. ' alle ore '. $orario . '</h5>
-                                  <p class="mb-1">' . $impianto . '</p>
-                                  <small>' . 'Organizzatore: ' . '<b>' . $organizzatore. '</b>' . '</small>
+                                  <h5 class="mb-1">' . e($data) . ' alle ore ' . e($orario) . '</h5>
+                                  <p class="mb-1">' . e($impianto) . '</p>
+                                  <small>' . 'Organizzatore: ' . '<b>' . e($organizzatore) . '</b>' . '</small>
                                   </button>
                                   </form>';       
                         }
                     echo '</div>';
         
-                    $rs2 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti FROM partita p WHERE p.data >= '$today' AND p.organizzatore = '$line[0]'") or die("Cannot execute query: $query\n");
-                    $rs = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p  where data >= '$today' and p.organizzatore='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs2 = q($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti FROM partita p WHERE p.data >= ? AND p.organizzatore = ?", [$today, $line[0]]);
+                    $rs = q($dbconn, "SELECT count(p.id) FROM partita p  where data >= ? and p.organizzatore=?", [$today, $line[0]]);
                     echo '<div class="col-6">';
                     echo '<div class="list-group-item flex-column align-items-start"><b>Partite organizzate</b></div>';
                     $res2=mysqli_result($rs, 0);
@@ -288,9 +272,9 @@ $time_check = $time-700;
                                         echo '<span class="badge badge-red badge-pill disponibili">Posti terminati</span>';
                                     }
                             echo  '</div>
-                                  <h5 class="mb-1">' . $data. ' alle ore '. $orario . '</h5>
-                                  <p class="mb-1">' . $impianto . '</p>
-                                  <small>' . 'Organizzatore: ' . '<b>' . $organizzatore. '</b>' . '</small>
+                                  <h5 class="mb-1">' . e($data) . ' alle ore ' . e($orario) . '</h5>
+                                  <p class="mb-1">' . e($impianto) . '</p>
+                                  <small>' . 'Organizzatore: ' . '<b>' . e($organizzatore) . '</b>' . '</small>
                                   </button>
                                   </form>';       
                         }
@@ -307,15 +291,15 @@ $time_check = $time-700;
     <div id="sfondo1" style="margin-left: 10%; margin-top: 2%; margin-right:10%">
       <?php
        echo '<h1 style="text-align: center;"><b>Benvenuto ';
-       echo $line[0];
+       echo e($line[0]);
        echo '!<br>';
        echo '</b></h1>';
        ?>  
        <br>
         <div id="elenco" class="row">                                                                                        
                 <?php
-                    $rs1 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g2 WHERE g2.idpartita = p.id) AS iscritti FROM partita p JOIN giocatori g ON p.id = g.idpartita WHERE p.data >= '$today' AND g.username = '$line[0]'") or die("Cannot execute query: $query\n");
-                    $rs0 = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p join giocatori g on p.id=g.idpartita where data >= '$today' and g.username='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs1 = q($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g2 WHERE g2.idpartita = p.id) AS iscritti FROM partita p JOIN giocatori g ON p.id = g.idpartita WHERE p.data >= ? AND g.username = ?", [$today, $line[0]]);
+                    $rs0 = q($dbconn, "SELECT count(p.id) FROM partita p join giocatori g on p.id=g.idpartita where data >= ? and g.username=?", [$today, $line[0]]);
                 
                     echo '<div class="col-6">';
                     echo '<div class="list-group-item flex-column align-items-start"><b>Partite da giocare</b></div>';
@@ -356,16 +340,16 @@ $time_check = $time-700;
                                         echo '<span class="badge badge-red badge-pill disponibili">0</span>';
                                     }
                             echo  '</div>
-                                  <h5 class="mb-1 h5">' . $data. ' '. $orario . '</h5>
-                                  <p style="font-size: 3vw;" class="mb-1">' . $impianto . '</p>
-                                  <small>' . 'Organizzatore: ' . '<b>' . $organizzatore. '</b>' . '</small>
+                                  <h5 class="mb-1 h5">' . e($data) . ' ' . e($orario) . '</h5>
+                                  <p style="font-size: 3vw;" class="mb-1">' . e($impianto) . '</p>
+                                  <small>' . 'Organizzatore: ' . '<b>' . e($organizzatore) . '</b>' . '</small>
                                   </button>
                                   </form>';       
                         }
                     echo '</div>';
         
-                    $rs2 = mysqli_query($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti FROM partita p WHERE p.data >= '$today' AND p.organizzatore = '$line[0]'") or die("Cannot execute query: $query\n");
-                    $rs = mysqli_query($dbconn, "SELECT count(p.id) FROM partita p  where data >= '$today' and p.organizzatore='$line[0]'") or die("Cannot execute query: $query\n");
+                    $rs2 = q($dbconn, "SELECT p.*, (SELECT COUNT(*) FROM giocatori g WHERE g.idpartita = p.id) AS iscritti FROM partita p WHERE p.data >= ? AND p.organizzatore = ?", [$today, $line[0]]);
+                    $rs = q($dbconn, "SELECT count(p.id) FROM partita p  where data >= ? and p.organizzatore=?", [$today, $line[0]]);
                     echo '<div class="col-6">';
                     echo '<div class="list-group-item flex-column align-items-start"><b>Partite organizzate</b></div>';
                     $res2=mysqli_result($rs, 0);
@@ -405,8 +389,8 @@ $time_check = $time-700;
                                         echo '<span class="badge badge-red badge-pill disponibili">0</span>';
                                     }
                             echo  '</div>
-                                  <h5 class="mb-1 h5">' . $data. ' '. $orario . '</h5>
-                                  <p style="font-size: 3vw;" class="mb-1">' . $impianto . '</p>
+                                  <h5 class="mb-1 h5">' . e($data) . ' ' . e($orario) . '</h5>
+                                  <p style="font-size: 3vw;" class="mb-1">' . e($impianto) . '</p>
                                   </button>
                                   </form>';       
                         }

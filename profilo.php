@@ -1,9 +1,4 @@
 <?php 
-function mysqli_result($res, $row) { 
-    $res->data_seek($row); 
-    $datarow = $res->fetch_array(); 
-    return $datarow[0]; 
-} 
 header('Cache-Control: no cache'); //no cache
 session_cache_limiter('private_no_expire'); // works
 //session_cache_limiter('public'); // works too
@@ -18,24 +13,18 @@ ini_set('display_errors', 0);
 ?>
 
 <?php
-            $host = "localhost";
-            $user = "avid3868345";
-            $database = "my_avid3868345";
+            require_once 'db.php';
             $tbl_name  = "user_online";
-            $dbconn = mysqli_connect($host, $user, "", $database) or die("Errore durante la connessione al database");
 
 
             $email = $_SESSION["inputemail"];
-            $q1 = "select username from users where email= '$email'";
-            $result = mysqli_query($dbconn, $q1);
+            $result = q($dbconn, "select username from users where email= ?", [$email]);
             $line = mysqli_fetch_row($result);
 
-            $q1= "SELECT count(session) from $tbl_name where username='$line[0]'";
-            $res = mysqli_query($dbconn, $q1);
+            $res = q($dbconn, "SELECT count(session) from $tbl_name where username=?", [$line[0]]);
             $francy = mysqli_result($res, 0);
             if($francy == 1){
-                $q1= "SELECT session from $tbl_name where username='$line[0]'";
-                $res = mysqli_query($dbconn, $q1);
+                $res = q($dbconn, "SELECT session from $tbl_name where username=?", [$line[0]]);
                 $session = mysqli_result($res, 0);
             }
             else{
@@ -106,7 +95,7 @@ ini_set('display_errors', 0);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel = "icon" href = "icon.png" type = "image/x-icon">
-    <title>WeSport - <?php echo $username ?></title>
+    <title>WeSport - <?php echo e($username) ?></title>
 </head>
 <body style="background-color: #61C2A2">
 
@@ -126,16 +115,13 @@ ini_set('display_errors', 0);
         <?php 
             echo '<a class="float-r" href="logout.php"><button type="button" class="btn btn-logout">Logout</button></a>'; 
 
-            $sql = "SELECT * FROM $tbl_name WHERE session='$session'";
-            $result = mysqli_query($dbconn, $sql);
+            $result = q($dbconn, "SELECT * FROM $tbl_name WHERE session=?", [$session]);
             $count = mysqli_num_rows($result);
 
             if ($count == "0") {
-                $sql1 = "INSERT INTO $tbl_name(session, time, username) VALUES('$session', '$time', '$line[0]')";
-                $result1 = mysqli_query($dbconn, $sql1);
+                $result1 = q($dbconn, "INSERT INTO $tbl_name(session, time, username) VALUES(?, ?, ?)", [$session, $time, $line[0]]);
             } else {
-                $sql2 = "UPDATE $tbl_name SET time='$time' WHERE session = '$session'";
-                $result2 = mysqli_query($dbconn, $sql2);
+                $result2 = q($dbconn, "UPDATE $tbl_name SET time=? WHERE session = ?", [$time, $session]);
             }
 
             $sql3 = "SELECT * FROM $tbl_name";
@@ -145,19 +131,15 @@ ini_set('display_errors', 0);
             echo '<div class="float-r"><button type="button" class="btn btn-success"><b>Users online: ' . $count_user_online . '</b></button></div>';
 
             // if over 10 minute, delete session 
-            $sql4     = "DELETE FROM $tbl_name WHERE time<$time_check";
-            $result4  = mysqli_query($dbconn, $sql4);
+            $result4 = q($dbconn, "DELETE FROM $tbl_name WHERE time<?", [$time_check]);
 
-            $sql3 = "SELECT count(username) FROM $tbl_name where username = '$line[0]'";
-            $result3 = mysqli_query($dbconn, $sql3);
+            $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name where username = ?", [$line[0]]);
             $online = mysqli_result($result3, 0);
 
-            $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-            $result3 = mysqli_query($dbconn, $sql3);
+            $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name where username = ?", [$username]);
             $onlineother = mysqli_result($result3, 0);
 
-            $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-            $result3 = mysqli_query($dbconn, $sql3);
+            $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name where username = ? and afk=1", [$username]);
             $afk = mysqli_result($result3, 0);
         ?> 
 
@@ -178,7 +160,7 @@ ini_set('display_errors', 0);
         if($online != 1){
             echo '<div class="btn-group">
             <button type="button" class="btn btn-login dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="offline.png" width=16> ' . $line[0] . '
+            <img src="offline.png" width=16> ' . e($line[0]) . '
             </button>
             <div class="dropdown-menu">
               <form action="profilo.php" method="post"><a class="dropdown-item"><button type="submit" style="background: none;
@@ -187,14 +169,14 @@ ini_set('display_errors', 0);
               padding: 0;
               font: inherit;
               cursor: pointer;
-              outline: inherit;" id="profile1" name="profile" value= ' . $line[0] . '>Profilo</button></a></form>
+              outline: inherit;" id="profile1" name="profile" value="' . e($line[0]) . '">Profilo</button></a></form>
               <a class="dropdown-item" href="logout.php">Esci</a>
             </div>
           </div>';         }
         else{
             echo '<div class="btn-group">
             <button type="button" class="btn btn-login dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="online.png" width=16> ' . $line[0] . '
+            <img src="online.png" width=16> ' . e($line[0]) . '
             </button>
             <div class="dropdown-menu">
             <form action="profilo.php" method="post"><a class="dropdown-item"><button type="submit" style="background: none;
@@ -203,7 +185,7 @@ ini_set('display_errors', 0);
             padding: 0;
             font: inherit;
             cursor: pointer;
-            outline: inherit;" id="profile1" name="profile" value= ' . $line[0] . '>Profilo</button></a></form>
+            outline: inherit;" id="profile1" name="profile" value="' . e($line[0]) . '">Profilo</button></a></form>
             <a class="dropdown-item" href="logout.php">Esci</a>
             </div>
           </div>';         }
@@ -222,10 +204,10 @@ ini_set('display_errors', 0);
             <a href="profilo.php" id="profile" class="">
             <?php if(isset($_SESSION['inputemail']))
                 if($online != 1){
-                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value= ' . $line[0] . '><img src="offline.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . $line[0] . '</p></button></form>';
+                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value="' . e($line[0]) . '"><img src="offline.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . e($line[0]) . '</p></button></form>';
                 }
                 else{
-                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value= ' . $line[0] . '><img id="dot" src="online.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . $line[0] . '</p></button></form>';
+                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value="' . e($line[0]) . '"><img id="dot" src="online.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . e($line[0]) . '</p></button></form>';
                 }
             ?>
             </a>
@@ -264,13 +246,13 @@ ini_set('display_errors', 0);
             <div id="header" class="bg-secondary">
                 <b>Profilo di <?php 
                                 if($onlineother != 1){
-                                    echo $username . ' <img src="offline.png" width=16>';
+                                    echo e($username) . ' <img src="offline.png" width=16>';
                                 }
                                 else if($afk == 1){
-                                    echo $username . ' <img src="afk.png" width=16>';
+                                    echo e($username) . ' <img src="afk.png" width=16>';
                                 }
                                 else{
-                                    echo $username . ' <img src="online.png" width=16>';
+                                    echo e($username) . ' <img src="online.png" width=16>';
                                 }
                               ?></b>
             </div>
@@ -279,38 +261,38 @@ ini_set('display_errors', 0);
                     /*echo 'PARTITE GIOCATE PER OGNI SPORT';
                     echo '<br>';*/
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username=?", [$username]);
                     $max6 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username=?", [$username]);
                     $max7 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username=?", [$username]);
                     $max8 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username=?", [$username]);
                     $max9 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username=?", [$username]);
                     $max10 = mysqli_result($res, 0);
 
                     /*echo '<br>';
                     echo 'PARTITE ORGANIZZATE PER OGNI SPORT';
                     echo '<br>';*/
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Pallavolo' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Pallavolo' AND p.organizzatore=?", [$username]);
                     $max1 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Calcio a 5' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Calcio a 5' AND p.organizzatore=?", [$username]);
                     $max2 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Padel' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Padel' AND p.organizzatore=?", [$username]);
                     $max3 = mysqli_result($res, 0);
                     
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Basket' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Basket' AND p.organizzatore=?", [$username]);
                     $max4 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Tennis' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Tennis' AND p.organizzatore=?", [$username]);
                     $max5 = mysqli_result($res, 0);
                     
                     /*echo '<br>';
@@ -327,19 +309,19 @@ ini_set('display_errors', 0);
                     echo 'PARTITE GIOCATE DA AMICI PER OGNI SPORT';
                     echo '<br>';*/
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username=?", [$friend]);
                     $max11 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username=?", [$friend]);
                     $max12 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username=?", [$friend]);
                     $max13 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username=?", [$friend]);
                     $max14 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username=?", [$friend]);
                     $max15 = mysqli_result($res, 0);
                     
 
@@ -438,13 +420,13 @@ ini_set('display_errors', 0);
             <div id="header" class="bg-secondary">
                 <b>Profilo di <?php 
                                 if($onlineother != 1){
-                                    echo $username . ' <img src="offline.png" width=16>';
+                                    echo e($username) . ' <img src="offline.png" width=16>';
                                 }
                                 else if($afk == 1){
-                                    echo $username . ' <img src="afk.png" width=16>';
+                                    echo e($username) . ' <img src="afk.png" width=16>';
                                 }
                                 else{
-                                    echo $username . ' <img src="online.png" width=16>';
+                                    echo e($username) . ' <img src="online.png" width=16>';
                                 }
                               ?></b>
             </div>
@@ -453,38 +435,38 @@ ini_set('display_errors', 0);
                     /*echo 'PARTITE GIOCATE PER OGNI SPORT';
                     echo '<br>';*/
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username=?", [$username]);
                     $max6 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username=?", [$username]);
                     $max7 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username=?", [$username]);
                     $max8 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username=?", [$username]);
                     $max9 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username='$username'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username=?", [$username]);
                     $max10 = mysqli_result($res, 0);
 
                     /*echo '<br>';
                     echo 'PARTITE ORGANIZZATE PER OGNI SPORT';
                     echo '<br>';*/
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Pallavolo' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Pallavolo' AND p.organizzatore=?", [$username]);
                     $max1 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Calcio a 5' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Calcio a 5' AND p.organizzatore=?", [$username]);
                     $max2 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Padel' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Padel' AND p.organizzatore=?", [$username]);
                     $max3 = mysqli_result($res, 0);
                     
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Basket' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Basket' AND p.organizzatore=?", [$username]);
                     $max4 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Tennis' AND p.organizzatore='$username'");
+                    $res = q($dbconn, "SELECT count(p.organizzatore) FROM partita p WHERE p.sport='Tennis' AND p.organizzatore=?", [$username]);
                     $max5 = mysqli_result($res, 0);
                     
                     /*echo '<br>';
@@ -501,19 +483,19 @@ ini_set('display_errors', 0);
                     echo 'PARTITE GIOCATE DA AMICI PER OGNI SPORT';
                     echo '<br>';*/
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Pallavolo' AND g.username=?", [$friend]);
                     $max11 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Calcio a 5' AND g.username=?", [$friend]);
                     $max12 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Padel' AND g.username=?", [$friend]);
                     $max13 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Tennis' AND g.username=?", [$friend]);
                     $max14 = mysqli_result($res, 0);
 
-                    $res = mysqli_query($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username='$friend'");
+                    $res = q($dbconn, "SELECT count(g.username) FROM giocatori g JOIN partita p ON g.idpartita=p.id WHERE p.sport='Basket' AND g.username=?", [$friend]);
                     $max15 = mysqli_result($res, 0);
                     
 

@@ -21,20 +21,15 @@ session_destroy();
         if(!(isset($_POST['inputemail']))) {
             header("Location: index.php");
         }
-            $host = "localhost";
-            $user = "avid3868345";
-            $database = "my_avid3868345";
+            require_once 'db.php';
             $tbl_name  = "user_online";
-            $dbconn = mysqli_connect($host, $user, "", $database) or die("Errore durante la connessione al database");
 
 
             $email = $_SESSION["inputemail"];
-            $q1 = "select username from users where email= '$email'";
-            $result = mysqli_query($dbconn, $q1);
+            $result = q($dbconn, "select username from users where email= ?", [$email]);
             $line = mysqli_fetch_row($result);
 
-            $q1 = "delete from user_online where username= '$line[0]'";
-            $result = mysqli_query($dbconn, $q1);
+            $result = q($dbconn, "delete from user_online where username= ?", [$line[0]]);
     ?>
     <div class="navbar navbar-dark bg-dark sticky-top">    
         <a class="navbar-brand" href="index.php"><img height="36" src="logo.png"></a>
