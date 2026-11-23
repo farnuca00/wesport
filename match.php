@@ -306,13 +306,13 @@ $id = (int)$id;
             $nodouble = q($dbconn, "SELECT count(username) FROM giocatori WHERE idpartita = ? AND username = ?", [$id, $line[0]]);
             $checked_nodouble = mysqli_result($nodouble, 0);
             if ($checked_nodouble == 0) {
-                q($dbconn, "INSERT INTO giocatori VALUES (?, ?, ?, ?)", [$id, $val + 1, $line[0], $pos]);
+                q($dbconn, "INSERT IGNORE INTO giocatori VALUES (?, ?, ?, ?)", [$id, $val + 1, $line[0], $pos]);
             }
         }
 
         // ISCRIVI UN AMICO
         if (isset($_POST[$bottone . 'f']) && $max == 0) {
-            q($dbconn, "INSERT INTO giocatori VALUES (?, ?, ?, ?)", [$id, $val + 1, $amico, $pos]);
+            q($dbconn, "INSERT IGNORE INTO giocatori VALUES (?, ?, ?, ?)", [$id, $val + 1, $amico, $pos]);
         }
 
         // ANNULLA (solo se il posto è tuo o del tuo amico)
