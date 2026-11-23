@@ -1,9 +1,4 @@
 <?php
-function mysqli_result($res, $row) { 
-    $res->data_seek($row); 
-    $datarow = $res->fetch_array(); 
-    return $datarow[0]; 
-} 
 header('Cache-Control: no cache'); //no cache
 session_cache_limiter('private_no_expire'); // works
 //session_cache_limiter('public'); // works too
@@ -154,6 +149,7 @@ if(isset($_POST['back'])){
 if(isset($_POST['id'])){
     $id = $_POST['id'];
 }
+$id = (int)$id;
 ?>
 
     <?php
@@ -170,24 +166,19 @@ if(isset($_POST['id'])){
         ?> 
 
 <?php
-            $host = "localhost";
-            $user = "avid3868345";
-            $database = "my_avid3868345";
-            $tbl_name  = "user_online";
-            $dbconn = mysqli_connect($host, $user, "", $database) or die("Errore durante la connessione al database");
+            require 'db.php';
+            $tbl_name = "user_online";
 
-
+            // email sent from form
             $email = $_SESSION["inputemail"];
-            $q1 = "select username from users where email= '$email'";
-            $result = mysqli_query($dbconn, $q1);
+
+            $result = q($dbconn, "select username from users where email= ?", [$email]);
             $line = mysqli_fetch_row($result);
 
-            $q1= "SELECT count(session) from $tbl_name where username='$line[0]'";
-            $res = mysqli_query($dbconn, $q1);
-            $francy = mysqli_result($res, 0);
-            if($francy == 1){
-                $q1= "SELECT session from $tbl_name where username='$line[0]'";
-                $res = mysqli_query($dbconn, $q1);
+            $res = q($dbconn, "SELECT count(session) from $tbl_name where username=?", [$line[0]]);
+            $conto_sessioni = mysqli_result($res, 0);
+            if($conto_sessioni == 1){
+                $res = q($dbconn, "SELECT session from $tbl_name where username=?", [$line[0]]);
                 $session = mysqli_result($res, 0);
             }
             else{
@@ -198,16 +189,14 @@ if(isset($_POST['id'])){
 
             echo '<a class="float-r" href="logout.php"><button type="button" class="btn btn-logout">Logout</button></a>'; 
 
-            $sql = "SELECT * FROM $tbl_name WHERE session='$session'";
-            $result = mysqli_query($dbconn, $sql);
+
+            $result = q($dbconn, "SELECT * FROM $tbl_name WHERE session=?", [$session]);
             $count = mysqli_num_rows($result);
 
             if ($count == "0") {
-                $sql1 = "INSERT INTO $tbl_name(session, time, username, afk) VALUES('$session', '$time', '$line[0]', 0)";
-                $result1 = mysqli_query($dbconn, $sql1);
+                q($dbconn, "INSERT INTO $tbl_name (session, time, username, afk) VALUES (?, ?, ?, 0)", [$session, $time, $line[0]]);
             } else {
-                $sql2 = "UPDATE $tbl_name SET time='$time' WHERE session = '$session'";
-                $result2 = mysqli_query($dbconn, $sql2);
+                q($dbconn, "UPDATE $tbl_name SET time=? WHERE session = ?", [$time, $session]);
             }
 
             $sql3 = "SELECT * FROM $tbl_name";
@@ -217,15 +206,12 @@ if(isset($_POST['id'])){
             echo '<div class="float-r"><button type="button" class="btn btn-success"><b>Users online: ' . $count_user_online . '</b></button></div>';
 
             // if over 10 minute, delete session 
-            $sql4     = "DELETE FROM $tbl_name WHERE time<$time_check";
-            $result4  = mysqli_query($dbconn, $sql4);
+            q($dbconn, "DELETE FROM $tbl_name WHERE time < ?", [$time_check]);
 
-            $sql3 = "SELECT count(username) FROM $tbl_name where username = '$line[0]'";
-            $result3 = mysqli_query($dbconn, $sql3);
+            $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$line[0]]);
             $online = mysqli_result($result3, 0);
 
-            $sql3 = "SELECT count(username) FROM $tbl_name where username = '$line[0]' and afk=1";
-            $result3 = mysqli_query($dbconn, $sql3);
+            $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$line[0]]);
             $afk = mysqli_result($result3, 0);
 
 ?>
@@ -299,264 +285,46 @@ if(isset($_POST['id'])){
             </a>
     </div>
 
-        <?php
-            $res1 = mysqli_query($dbconn, "SELECT distinct max(codice) FROM giocatori");
-            $val = mysqli_result($res1, 0);
-            $amico = 'Amico di ' . $line[0];
+<?php
+    $res1 = mysqli_query($dbconn, "SELECT max(codice) FROM giocatori");
+    $val = mysqli_result($res1, 0);
+    $amico = 'Amico di ' . $line[0];
 
-            $res0 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=1");
-            $max = mysqli_result($res0, 0);
-            if(isset($_POST['submit1-1']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 1)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit1-1f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 1)";
-                $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit1-1a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 1";
-                $data = mysqli_query($dbconn, $query);
-            }
-        ?>
+    // nome del bottone => posizione nel database
+    $posti = [
+        'submit1-1' => 1, 'submit1-2' => 2, 'submit1-3' => 3, 'submit1-4' => 4, 'submit1-5' => 5, 'submit1-6' => 11,
+        'submit2-1' => 6, 'submit2-2' => 7, 'submit2-3' => 8, 'submit2-4' => 9, 'submit2-5' => 10, 'submit2-6' => 12,
+    ];
 
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=2");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit1-2']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 2)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit1-2f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 2)";
-                $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit1-2a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 2";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
+    $checked_nodouble = 0;
+    foreach ($posti as $bottone => $pos) {
+        $res = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, $pos]);
+        $max = mysqli_result($res, 0);
 
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=3");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit1-3']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 3)";
-                    $data = mysqli_query($dbconn, $query);
-                }
+        // ISCRIVITI
+        if (isset($_POST[$bottone]) && $max == 0) {
+            $nodouble = q($dbconn, "SELECT count(username) FROM giocatori WHERE idpartita = ? AND username = ?", [$id, $line[0]]);
+            $checked_nodouble = mysqli_result($nodouble, 0);
+            if ($checked_nodouble == 0) {
+                q($dbconn, "INSERT INTO giocatori VALUES (?, ?, ?, ?)", [$id, $val + 1, $line[0], $pos]);
             }
-            if(isset($_POST['submit1-3f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 3)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit1-3a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 3";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
+        }
 
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=4");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit1-4']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 4)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit1-4f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 4)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit1-4a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 4";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
+        // ISCRIVI UN AMICO
+        if (isset($_POST[$bottone . 'f']) && $max == 0) {
+            q($dbconn, "INSERT INTO giocatori VALUES (?, ?, ?, ?)", [$id, $val + 1, $amico, $pos]);
+        }
 
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=5");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit1-5']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 5)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit1-5f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 5)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit1-5a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 5";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
-
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=11");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit1-6']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 11)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit1-6f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 11)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit1-6a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 11";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
-
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=6");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit2-1']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 6)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit2-1f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 6)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit2-1a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 6";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
-
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=7");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit2-2']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 7)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit2-2f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 7)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit2-2a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 7";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
-
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=8");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit2-3']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 8)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit2-3f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 8)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit2-3a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 8";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
-
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=9");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit2-4']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 9)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit2-4f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 9)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit2-4a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 9";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
-
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=10");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit2-5']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 10)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit2-5f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 10)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit2-5a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 10";
-                 $data = mysqli_query($dbconn, $query);
-            }
-        ?>
-
-        <?php
-            $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=12");
-            $max = mysqli_result($res2, 0);
-            if(isset($_POST['submit2-6']) && $max==0) {
-                $nodouble = mysqli_query($dbconn, "SELECT count(username) FROM giocatori where idpartita=$id and username='$line[0]'");
-                $pablo = mysqli_result($nodouble, 0);
-                if($pablo == 0){
-                    $query = "insert into giocatori values ($id, $val+1, '$line[0]', 12)";
-                    $data = mysqli_query($dbconn, $query);
-                }
-            }
-            if(isset($_POST['submit2-6f']) && $max==0){
-                $query = "insert into giocatori values ($id, $val+1, '$amico', 12)";
-                 $data = mysqli_query($dbconn, $query);
-            }
-            if(isset($_POST['submit2-6a']) && $max==1){
-                $query = "delete from giocatori where idpartita=$id and posizione= 12";
-                $data = mysqli_query($dbconn, $query);
-            }
-        ?>
+        // ANNULLA (solo se il posto è tuo o del tuo amico)
+        if (isset($_POST[$bottone . 'a']) && $max == 1) {
+            q($dbconn, "DELETE FROM giocatori WHERE idpartita = ? AND posizione = ? AND username IN (?, ?)",
+              [$id, $pos, $line[0], $amico]);
+        }
+    }
+?>
         
         <?php
-                $res2 = mysqli_query($dbconn, "SELECT sport FROM partita where id=$id");
+                $res2 = q($dbconn, "SELECT sport FROM partita WHERE id = ?", [$id]);
                 $sport = mysqli_result($res2, 0);
                 if($sport == 'Calcio a 5'){
                     echo '<a style="margin-left: 16%;" id="home-btn" href="calcio.php"><button type="button" class="btn btn-dark"><i class="fas fa-arrow-left"></i> Indietro</button></a>';
@@ -575,7 +343,7 @@ if(isset($_POST['id'])){
                 }
             ?>
                 <?php
-                    if((isset($_POST['submit1-1']) || isset($_POST['submit1-2']) || isset($_POST['submit1-3']) || isset($_POST['submit1-4']) || isset($_POST['submit1-5']) || isset($_POST['submit1-6']) || isset($_POST['submit2-1']) || isset($_POST['submit2-2']) || isset($_POST['submit2-3']) || isset($_POST['submit2-4']) || isset($_POST['submit2-5']) || isset($_POST['submit2-6'])) && $pablo != 0) {
+                    if((isset($_POST['submit1-1']) || isset($_POST['submit1-2']) || isset($_POST['submit1-3']) || isset($_POST['submit1-4']) || isset($_POST['submit1-5']) || isset($_POST['submit1-6']) || isset($_POST['submit2-1']) || isset($_POST['submit2-2']) || isset($_POST['submit2-3']) || isset($_POST['submit2-4']) || isset($_POST['submit2-5']) || isset($_POST['submit2-6'])) && $checked_nodouble != 0) {
                         echo '<div id="alreadysigned-m" position: absolute; style="width:80%; z-index: 9998; margin-left: 10%; margin-top: 10px;" class="alert alert-danger alert-dismissible">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <strong>Ops!</strong> Sei già iscritto a questa partita.
@@ -589,13 +357,13 @@ if(isset($_POST['id'])){
 
         <?php
             $f = 'Amico di ';
-            $res2 = mysqli_query($dbconn, "SELECT * FROM partita where id=$id");
+            $res2 = q($dbconn, "SELECT * FROM partita WHERE id = ?", [$id]);
             $row = mysqli_fetch_array($res2, MYSQLI_NUM);
             $impianto = $row[2];
             $data2 = $row[3];
             $ora = $row[4];
             $organizzatore = $row[5];
-            $res2 = mysqli_query($dbconn, "SELECT sport FROM partita where id=$id");
+            $res2 = q($dbconn, "SELECT sport FROM partita WHERE id = ?", [$id]);
             $sport = mysqli_result($res2, 0);
             if($sport == 'Calcio a 5'){
                 echo '<div id="teams">
@@ -616,17 +384,15 @@ if(isset($_POST['id'])){
                     <div id="left-content">
                     <b><font face="Arial" size=4>SQUADRA 1</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=1");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=1");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -678,17 +444,15 @@ if(isset($_POST['id'])){
                         </div>
                         <br>
                         <div class="content-item">'; 
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=2");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=2");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -740,17 +504,15 @@ if(isset($_POST['id'])){
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=3");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=3");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -802,17 +564,15 @@ if(isset($_POST['id'])){
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=4");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=4");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -864,17 +624,15 @@ if(isset($_POST['id'])){
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=5");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 5]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=5");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 5]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -931,17 +689,15 @@ if(isset($_POST['id'])){
                     <div id="right-content">
                     <b><font face="Arial" size=4>SQUADRA 2</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=6");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 6]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=6");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 6]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -993,17 +749,15 @@ if(isset($_POST['id'])){
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=7");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 7]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=7");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 7]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1055,17 +809,15 @@ if(isset($_POST['id'])){
                             </div>
                             <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=8");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 8]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=8");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 8]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1117,17 +869,15 @@ if(isset($_POST['id'])){
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=9");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 9]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=9");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 9]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1179,17 +929,15 @@ if(isset($_POST['id'])){
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=10");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 10]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=10");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 10]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1264,17 +1012,15 @@ if(isset($_POST['id'])){
                     <div id="left-content">
                     <b><font face="Arial" size=4>SQUADRA 1</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=1");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=1");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1326,17 +1072,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">'; 
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=2");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=2");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1388,17 +1132,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=3");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=3");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1450,17 +1192,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=4");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=4");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1512,17 +1252,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=5");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 5]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=5");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 5]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1574,17 +1312,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>               
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=11");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 11]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=11");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 11]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1641,17 +1377,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                     <div id="right-content">
                     <b><font face="Arial" size=4>SQUADRA 2</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=6");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 6]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=6");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 6]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1703,17 +1437,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=7");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 7]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=7");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 7]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1765,17 +1497,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                             </div>
                             <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=8");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 8]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=8");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 8]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1827,17 +1557,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=9");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 9]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=9");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 9]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1889,17 +1617,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=10");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 10]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=10");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 10]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -1951,17 +1677,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>              
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=12");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 12]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=12");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 12]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2036,17 +1760,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                     <div id="left-content">
                     <b><font face="Arial" size=4>SQUADRA 1</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=1");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=1");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2098,17 +1820,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">'; 
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=2");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=2");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2160,17 +1880,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=3");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=3");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2222,17 +1940,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=4");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=4");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2284,17 +2000,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=5");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 5]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=5");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 5]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2351,17 +2065,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                     <div id="right-content">
                     <b><font face="Arial" size=4>SQUADRA 2</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=6");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 6]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=6");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 6]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2413,17 +2125,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=7");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 7]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=7");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 7]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2475,17 +2185,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                             </div>
                             <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=8");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 8]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=8");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 8]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2537,17 +2245,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=9");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 9]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=9");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 9]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2599,17 +2305,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=10");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 10]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=10");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 10]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2685,17 +2389,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                     <div id="left-content">
                     <b><font face="Arial" size=4>SQUADRA 1</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=1");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=1");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2747,17 +2449,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">'; 
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=2");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=2");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2814,17 +2514,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                     <div id="right-content">
                     <b><font face="Arial" size=4>SQUADRA 2</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=3");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=3");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 3]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2876,17 +2574,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                         </div>
                         <br>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=4");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=4");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 4]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -2961,17 +2657,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                     <div id="left-content">
                     <b><font face="Arial" size=4>SQUADRA 1</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=1");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=1");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 1]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
@@ -3028,17 +2722,15 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                     <div id="right-content">
                     <b><font face="Arial" size=4>SQUADRA 2</font></b>
                         <div class="content-item">';
-                                $res2 = mysqli_query($dbconn, "SELECT count(codice) FROM giocatori where idpartita=$id and posizione=2");
+                                $res2 = q($dbconn, "SELECT count(codice) FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                 $max = mysqli_result($res2, 0);
                                 if($max == 1){
-                                    $res = mysqli_query($dbconn, "SELECT username FROM giocatori where idpartita=$id and posizione=2");
+                                    $res = q($dbconn, "SELECT username FROM giocatori WHERE idpartita = ? AND posizione = ?", [$id, 2]);
                                     $username = mysqli_result($res, 0);
                                     $friend = 'Amico di ' . $line[0];
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username'";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ?", [$username]);
                                     $online = mysqli_result($result3, 0);
-                                    $sql3 = "SELECT count(username) FROM $tbl_name where username = '$username' and afk=1";
-                                    $result3 = mysqli_query($dbconn, $sql3);
+                                    $result3 = q($dbconn, "SELECT count(username) FROM $tbl_name WHERE username = ? AND afk = 1", [$username]);
                                     $afk = mysqli_result($result3, 0);
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
