@@ -17,3 +17,7 @@ function mysqli_result($res, $row) {
     $datarow = $res->fetch_array();
     return $datarow[0];
 }
+
+function e($s) {
+    return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8');
+}

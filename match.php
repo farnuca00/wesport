@@ -232,7 +232,7 @@ $id = (int)$id;
         if($online != 1){
             echo '<div class="btn-group">
             <button type="button" class="btn btn-login dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="offline.png" width=16> ' . $line[0] . '
+            <img src="offline.png" width=16> ' . e($line[0]) . '
             </button>
             <div class="dropdown-menu">
               <form action="profilo.php" method="post"><a class="dropdown-item"><button type="submit" style="background: none;
@@ -241,14 +241,14 @@ $id = (int)$id;
               padding: 0;
               font: inherit;
               cursor: pointer;
-              outline: inherit;" id="profile1" name="profile" value= ' . $line[0] . '>Profilo</button></a></form>
+              outline: inherit;" id="profile1" name="profile" value="' . e($line[0]) . '">Profilo</button></a></form>
               <a class="dropdown-item" href="logout.php">Esci</a>
             </div>
           </div>';         }
         else{
             echo '<div class="btn-group">
             <button type="button" class="btn btn-login dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="online.png" width=16> ' . $line[0] . '
+            <img src="online.png" width=16> ' . e($line[0]) . '
             </button>
             <div class="dropdown-menu">
             <form action="profilo.php" method="post"><a class="dropdown-item"><button type="submit" style="background: none;
@@ -257,7 +257,7 @@ $id = (int)$id;
             padding: 0;
             font: inherit;
             cursor: pointer;
-            outline: inherit;" id="profile1" name="profile" value= ' . $line[0] . '>Profilo</button></a></form>
+            outline: inherit;" id="profile1" name="profile" value="' . e($line[0]) . '">Profilo</button></a></form>
             <a class="dropdown-item" href="logout.php">Esci</a>
             </div>
           </div>';         }
@@ -276,10 +276,10 @@ $id = (int)$id;
             <a href="profilo.php" id="profile" class="">
             <?php if(isset($_SESSION['inputemail']))
                 if($online != 1){
-                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value= ' . $line[0] . '><img src="offline.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . $line[0] . '</p></button></form>';
+                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value="' . e($line[0]) . '"><img src="offline.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . e($line[0]) . '</p></button></form>';
                 }
                 else{
-                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value= ' . $line[0] . '><img id="dot" src="online.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . $line[0] . '</p></button></form>';
+                    echo '<form action="profilo.php" method="post"><button class="float-r btn-profile" type="submit" id="profile1" name="profile" value="' . e($line[0]) . '"><img id="dot" src="online.png" style="margin-top: 5px;" width=16><i style="padding: 10px;" class="far fa-user float-r"></i><p id="username" class="float-r username">' . e($line[0]) . '</p></button></form>';
                 }
             ?>
             </a>
@@ -370,9 +370,9 @@ $id = (int)$id;
                 <div style="height: auto;">
                     <h1 style="text-align:center;">Partita di <b>' . $sport . '</b></h1>
                     <div style="text-align: center"><b><font face="Arial" size=3>
-                        Organizzatore: ' . $organizzatore . '<br>
-                        Data: ' . $data2 . ',  Orario: ' . $ora . '<br>
-                        Impianto: ' . $impianto . ' 
+                        Organizzatore: ' . e($organizzatore) . '<br>
+                        Data: ' . e($data2) . ',  Orario: ' . e($ora) . '<br>
+                        Impianto: ' . e($impianto) . ' 
                         </font> 
                     </b>
                         </div>
@@ -397,37 +397,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -457,37 +457,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -517,37 +517,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -577,37 +577,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -637,37 +637,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-5a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-5a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -702,37 +702,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-1a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-1a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -762,37 +762,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-2a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-2a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -822,37 +822,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-3a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-3a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -882,37 +882,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-4a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-4a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -942,37 +942,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-5a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check1();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-5a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -998,9 +998,9 @@ $id = (int)$id;
                 <div style="height: auto;">
                     <h1 style="text-align:center;">Partita di <b>' . $sport . '</b></h1>
                     <div style="text-align: center"><b><font face="Arial" size=3>
-                        Organizzatore: ' . $organizzatore . '<br>
-                        Data: ' . $data2 . ',  Orario: ' . $ora . '<br>
-                        Impianto: ' . $impianto . ' 
+                        Organizzatore: ' . e($organizzatore) . '<br>
+                        Data: ' . e($data2) . ',  Orario: ' . e($ora) . '<br>
+                        Impianto: ' . e($impianto) . ' 
                         </font> 
                     </b>
                         </div>
@@ -1025,37 +1025,37 @@ $id = (int)$id;
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
                                         echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1085,37 +1085,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1145,37 +1145,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1205,37 +1205,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1265,37 +1265,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1325,37 +1325,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-6a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-6a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile11" name="profile1-6" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-6a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-6a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1390,37 +1390,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1450,37 +1450,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1510,37 +1510,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1570,37 +1570,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1630,37 +1630,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1690,37 +1690,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-6a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-6a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check2();" id="profile12" name="profile2-6" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-6a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-6a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1746,9 +1746,9 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                 <div style="height: auto;">
                     <h1 style="text-align:center;">Partita di <b>' . $sport . '</b></h1>
                     <div style="text-align: center"><b><font face="Arial" size=3>
-                        Organizzatore: ' . $organizzatore . '<br>
-                        Data: ' . $data2 . ',  Orario: ' . $ora . '<br>
-                        Impianto: ' . $impianto . ' 
+                        Organizzatore: ' . e($organizzatore) . '<br>
+                        Data: ' . e($data2) . ',  Orario: ' . e($ora) . '<br>
+                        Impianto: ' . e($impianto) . ' 
                         </font> 
                     </b>
                         </div>
@@ -1773,37 +1773,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1833,37 +1833,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1893,37 +1893,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -1953,37 +1953,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2013,37 +2013,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile5" name="profile1-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2078,37 +2078,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile6" name="profile2-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2138,37 +2138,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile7" name="profile2-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2198,37 +2198,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile8" name="profile2-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2258,37 +2258,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile9" name="profile2-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2318,37 +2318,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check3();" id="profile10" name="profile2-5" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit2-5a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit2-5a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2375,9 +2375,9 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                 <div style="height: auto;">
                     <h1 style="text-align:center;">Partita di <b>' . $sport . '</b></h1>
                     <div style="text-align: center"><b><font face="Arial" size=3>
-                        Organizzatore: ' . $organizzatore . '<br>
-                        Data: ' . $data2 . ',  Orario: ' . $ora . '<br>
-                        Impianto: ' . $impianto . ' 
+                        Organizzatore: ' . e($organizzatore) . '<br>
+                        Data: ' . e($data2) . ',  Orario: ' . e($ora) . '<br>
+                        Impianto: ' . e($impianto) . ' 
                         </font> 
                     </b>
                         </div>
@@ -2402,37 +2402,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2462,37 +2462,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2527,37 +2527,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile3" name="profile1-3" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-3a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-3a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2587,37 +2587,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check4();" id="profile4" name="profile1-4" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-4a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-4a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2643,9 +2643,9 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                 <div style="position: relative; height: auto;">
                     <h1 style="text-align:center;">Partita di <b>' . $sport . '</b></h1>
                     <div style="text-align: center"><b><font face="Arial" size=3>
-                        Organizzatore: ' . $organizzatore . '<br>
-                        Data: ' . $data2 . ',  Orario: ' . $ora . '<br>
-                        Impianto: ' . $impianto . ' 
+                        Organizzatore: ' . e($organizzatore) . '<br>
+                        Data: ' . e($data2) . ',  Orario: ' . e($ora) . '<br>
+                        Impianto: ' . e($impianto) . ' 
                         </font> 
                     </b>
                         </div>
@@ -2670,37 +2670,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile1" name="profile1-1" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-1a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-1a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
@@ -2735,37 +2735,37 @@ echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submi
                                     echo '<div class="settantapx">';
                                         if($username == $line[0]){
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     } 
                                     else if($username != $line[0] && $username != $friend){
                                         if (strpos($username, $f) !== false) {
-                                            echo '<button id="friend" class="btn btn-success" type="button">' . $username . '</button>';
-                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $username . '</button>';
+                                            echo '<button id="friend" class="btn btn-success" type="button">' . e($username) . '</button>';
+                                            echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($username) . '</button>';
                                         }
                                         else{
                                             if($online != 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value= ' . $username . '><img src="offline.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="offline.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else if($afk == 1){
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value= ' . $username . '><img src="afk.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="afk.png" width=16> ' . e($username) . '</button>';
                                             }
                                             else{
-                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value= ' . $username . '><img src="online.png" width=16> ' . $username . '</button>';
+                                                echo '<button class="btn btn-success" type="submit" onclick="return check5();" id="profile2" name="profile1-2" value="' . e($username) . '"><img src="online.png" width=16> ' . e($username) . '</button>';
                                             }
                                         }
                                     }
                                     else{
-                                        echo '<button id="friend" class="btn btn-success" type="button">' . $friend . '</button>';
-                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . $friend . '</button>';
+                                        echo '<button id="friend" class="btn btn-success" type="button">' . e($friend) . '</button>';
+                                        echo '<button id="friend-m" class="btn btn-success btn-sm" type="button">' . e($friend) . '</button>';
                                         echo '<button class="btn btn-logout" type="submit" id="submit1-a" name="submit1-2a" value="' . $id . '">ANNULLA</button>';
 echo '<button style="margin-top: 5px;" class="btn btn-logout btn-sm" type="submit" id="submit1-a-m" name="submit1-2a" value="' . $id . '"><i class="fa-solid fa-x"></i></button>';
                                     }
